@@ -1,24 +1,27 @@
-Download Images from Excel Sheet
 
+**
+
+# Download Images from Excel Sheet
+**
 This script allows you to download images from a specified Excel sheet using the provided URLs. It uses the Node.js runtime environment and requires the following dependencies: XLSX, fs, path, and axios.
-Prerequisites
 
-Before running this script, make sure you have the following:
+**Prerequisites
+Before running this script, make sure you have the following:**
 
-    Node.js installed on your machine.
-    An Excel sheet (.xlsx) containing a list of URLs to the images you want to download.
+ - Node.js installed on your machine.
+ - An Excel sheet (.xlsx) containing a list of URLs to the
+ - Images you want to download.
 
-Setup
+**Setup**
 
     Clone or download the script to your local machine.
 
-    Install the dependencies by running the following command in your terminal:
-
-    lua
+    **Install the dependencies by running the following command in your terminal:**
+    
 
     npm install xlsx fs path axios
 
-Usage
+**Usage**
 
     Replace the value of ruta in the leerExcel function call with the path to your Excel sheet.
 
@@ -32,46 +35,44 @@ Usage
 
     The script will read the URLs from the Excel sheet and download the corresponding images to the "images" folder.
 
-Code Explanation
+**Code Explanation**
 
-javascript
-
-const XLSX = require('xlsx');
-const fs = require('fs');
-const path = require('path');
-const axios = require('axios').default;
-
-const downloadFile = async (fileUrl, downloadFolder, nombre) => {
-  const localFilePath = path.resolve(__dirname, downloadFolder, nombre + '.jpg');
-
-  try {
-    const response = await axios({
-      method: 'GET',
-      url: fileUrl,
-      responseType: 'stream',
-    });
-
-    const w = response.data.pipe(fs.createWriteStream(localFilePath));
-    w.on('finish', () => {
-      console.log('Archivo descargado correctamente!');
-    });
-  } catch (err) {
-    throw new Error(err);
-  }
-};
-
-function leerExcel(ruta) {
-  const workbook = XLSX.readFile(ruta);
-  const workbookSheet = workbook.SheetNames;
-  const sheet = workbookSheet[0];
-  const dataExcel = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
-
-  for (const item of dataExcel) {
-    downloadFile(item['url'], 'images/', item['cod']);
-  }
-}
-
-leerExcel('sheet.xlsx');
+    const XLSX = require('xlsx');
+    const fs = require('fs');
+    const path = require('path');
+    const axios = require('axios').default;
+    
+    const downloadFile = async (fileUrl, downloadFolder, nombre) => {
+      const localFilePath = path.resolve(__dirname, downloadFolder, nombre + '.jpg');
+    
+      try {
+        const response = await axios({
+          method: 'GET',
+          url: fileUrl,
+          responseType: 'stream',
+        });
+    
+        const w = response.data.pipe(fs.createWriteStream(localFilePath));
+        w.on('finish', () => {
+          console.log('Archivo descargado correctamente!');
+        });
+      } catch (err) {
+        throw new Error(err);
+      }
+    };
+    
+    function leerExcel(ruta) {
+      const workbook = XLSX.readFile(ruta);
+      const workbookSheet = workbook.SheetNames;
+      const sheet = workbookSheet[0];
+      const dataExcel = XLSX.utils.sheet_to_json(workbook.Sheets[sheet]);
+    
+      for (const item of dataExcel) {
+        downloadFile(item['url'], 'images/', item['cod']);
+      }
+    }
+    
+    leerExcel('sheet.xlsx');
 
 The script starts by importing the necessary libraries: XLSX for reading Excel files, fs for file system operations, path for resolving file paths, and axios for making HTTP requests.
 
